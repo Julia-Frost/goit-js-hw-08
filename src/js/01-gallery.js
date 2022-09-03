@@ -1,62 +1,27 @@
 // Add imports above this line
-import { galleryItems } from './gallery-items';
-// Change code below this line
-
-// Описаний в документації
 import SimpleLightbox from 'simplelightbox';
-
-// Додатковий імпорт стилів
 import 'simplelightbox/dist/simple-lightbox.min.css';
-
-// Створення розмітки
-
-const galleryEl = document.querySelector('.gallery');
-const list = createImgList(galleryItems);
-
-galleryEl.insertAdjacentHTML('beforeend', list);
-
-function createImgList(galleryItems) {
-  return galleryItems
-    .map(({ preview, original, description }) => {
-      return `
-            <div class="gallery__item">
-                <a class="gallery__link" href="large-image.jpg">
-                    <img
-                        class="gallery__image"
-                        src="${preview}"
-                        data-source="${original}"
-                        alt="${description}"
-                    />
-                </a>
-            </div>`;
-    })
-    .join('');
+import { galleryItems } from './gallery-items';
+const galleryAlbum = document.querySelector('.gallery');
+galleryAlbum.addEventListener('click', openGalleryItem);
+// Добавляет картинки из объекта в разметку
+function addItemToGallery({ preview, original, description }) {
+  return `<a class="gallery__item" href="${original}">
+            <img class="gallery__image"
+            src="${preview}"
+            alt="${description}" />
+        </a>`;
 }
-
-// Додання слухача подій на <div class="gallery">
-
-galleryEl.addEventListener('click', onImgClick);
-
-function onImgClick(event) {
+// Делаем один бойльшой файл разметки
+let addNewImage = galleryItems.map(addItemToGallery).join('');
+// Вставляет в разметку разметку картинки
+galleryAlbum.insertAdjacentHTML('afterbegin', addNewImage);
+// Открывает модальное окно с картинкой по клику (большой, оригинальной)
+function openGalleryItem(event) {
   event.preventDefault();
-
-  if (!event.target.classList.contains('gallery__image')) {
-    return;
-  }
-  // Підключення Лайтбокс
-  const instance = basicLightbox.create(`
-    <img src="${event.target.dataset.source}" width="800" height="600">
-`);
-
-  instance.show();
-
-  // Закриття по кліку на Escape
-
-  window.addEventListener('keydown', onEscapeDown);
-  function onEscapeDown(event) {
-    if (event.code !== 'Escape') {
-      return;
-    }
-    instance.close();
-  }
+  // Достукиваемся до дата-атрибута по клику
+  const imageSrc = event.target.dataset.source;
 }
+let gallery = new SimpleLightbox('.gallery a');
+let captionsData = (gallery.options.captionsData = 'alt');
+let captionDelay = (gallery.options.captionDelay = 250);
