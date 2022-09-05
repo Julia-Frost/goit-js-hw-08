@@ -5,7 +5,9 @@ const textarea = document.querySelector('.feedback-form textarea');
 const email = document.querySelector('.feedback-form input');
 
 const STG_KEY = 'formStorage';
-const formStorage = {};
+let formStorage = {};
+
+onRefreshPage();
 
 form.addEventListener('submit', onFormSubmit);
 form.addEventListener('input', throttle(onNameInput, 500));
@@ -23,6 +25,7 @@ function onNameInput(event) {
 function onFormSubmit(event) {
   event.preventDefault();
   console.log(formStorage);
+  formStorage = {};
   event.target.reset();
   localStorage.removeItem(STG_KEY);
 }
@@ -41,6 +44,8 @@ function onRefreshPage() {
   if (localSaveMessage?.message) {
     textarea.value = localSaveMessage.message;
   }
-}
 
-onRefreshPage();
+  if (localSaveMessage) {
+    formStorage = localSaveMessage;
+  }
+}
