@@ -49,3 +49,6 @@ function onRefreshPage() {
     formStorage = localSaveMessage;
   }
 }
+
+
+console.log("function");
