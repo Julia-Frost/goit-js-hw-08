@@ -7,8 +7,6 @@ const galleryAlbum = document.querySelector('.gallery');
 
 galleryAlbum.addEventListener('click', openGalleryItem);
 
-// Додає зображення з масиву
-
 function addItemToGallery({ preview, original, description }) {
   return `<a class="gallery__item" href="${original}">
             <img class="gallery__image"
